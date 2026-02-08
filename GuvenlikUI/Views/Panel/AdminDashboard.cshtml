@@ -1,0 +1,42 @@
+@{ ViewData["Title"] = "Yönetim Merkezi"; }
+
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 text-danger fw-bold"><i class="bi bi-shield-lock-fill"></i> SİSTEM YÖNETİM PANELİ</h1>
+        <p class="lead text-muted">Yetkili Personel ve Olay İnceleme Ekranı</p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        <div class="col-md-5">
+            <a asp-action="AdminLogs" class="text-decoration-none">
+                <div class="card h-100 shadow-sm hover-effect border-danger">
+                    <div class="card-body text-center p-5">
+                        <h1 class="display-1 text-danger"><i class="bi bi-journal-text"></i></h1>
+                        <h3 class="card-title mt-3 text-dark">Geçmiş Log Kayıtları</h3>
+                        <p class="card-text text-muted">Sisteme yapılan tüm giriş-çıkış denemelerini, saatlerini ve durumlarını inceleyin.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-5">
+            <a asp-action="AdminPlates" class="text-decoration-none">
+                <div class="card h-100 shadow-sm hover-effect border-primary">
+                    <div class="card-body text-center p-5">
+                        <h1 class="display-1 text-primary"><i class="bi bi-car-front-fill"></i></h1>
+                        <h3 class="card-title mt-3 text-dark">Kayıtlı Plaka Envanteri</h3>
+                        <p class="card-text text-muted">Sistemdeki tüm kayıtlı plakaları ve bu plakaları sisteme kimin eklediğini görüntüleyin.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    
+    <div class="text-center mt-5">
+        <a href="/Panel/SecurityPanel" class="btn btn-secondary btn-lg"><i class="bi bi-arrow-left"></i> Güvenlik Ekranına Dön</a>
+    </div>
+</div>
+
+<style>
+    .hover-effect:hover { transform: translateY(-5px); transition: 0.3s; background-color: #f8f9fa; }
+</style>

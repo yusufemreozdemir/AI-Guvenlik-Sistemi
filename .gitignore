@@ -1,0 +1,32 @@
+.DS_Store
+Thumbs.db
+
+# Python tarafı
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+venv/
+env/
+.env
+
+*.db
+*.sqlite3
+
+weights/
+*.pt
+*.engine
+*.onnx
+
+*.log
+
+# .NET tarafı
+bin/
+obj/
+
+.vs/
+*.user
+*.suo
+*.userprefs
+

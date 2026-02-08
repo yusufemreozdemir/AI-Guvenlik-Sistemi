@@ -1,0 +1,112 @@
+@model List<GuvenlikUI.Models.PlateModel>
+@{ ViewData["Title"] = "Güvenlik Ekranı"; }
+
+<div class="container-fluid mt-3">
+    <div class="row">
+        
+        <div class="col-md-9">
+            <div class="card bg-dark text-white">
+                <div class="card-header d-flex justify-content-between">
+                    <span>CANLI AKIŞ - ANA GİRİŞ KAMERASI</span>
+                    <span class="badge bg-danger animate-blink">REC</span>
+                </div>
+                <div class="card-body p-0 text-center">
+                    <img src="http://localhost:8000/video_feed" style="width: 100%; height: 75vh; object-fit: contain;" />
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            
+            <div class="card mb-3 text-center" id="statusCard">
+                <div class="card-header">Son Tespit Edilen Araç</div>
+                <div class="card-body">
+                    <h2 class="display-6 fw-bold" id="lblPlate">---</h2>
+                    <h5 id="lblOwner" class="text-muted">Bekleniyor...</h5>
+                    <div id="statusBadge" class="badge bg-secondary p-2 w-100 mt-2">DURUM YOK</div>
+                    <small class="text-muted mt-2 d-block" id="lblTime">--:--:--</small>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2 mb-3">
+                <a href="/Account/Logout" class="btn btn-danger">Vardiya Çıkışı</a>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header bg-warning">Hızlı Plaka Girişi</div>
+                <div class="card-body p-2">
+                    <form asp-action="AddPlate" method="post">
+                        <input type="hidden" name="returnUrl" value="/Panel/SecurityPanel" />
+                        <input type="text" name="plateNumber" class="form-control mb-2" placeholder="PLAKA" required>
+                        <button class="btn btn-dark w-100 btn-sm" type="submit">Sisteme İşle</button>
+                    </form>
+                    @if (TempData["Message"] != null) { <small class="text-success">@TempData["Message"]</small> }
+                </div>
+            </div>
+
+            <div class="card" style="height: 30vh;">
+                <div class="card-header bg-secondary text-white">İzinli Araç Listesi</div>
+                <div class="card-body p-0" style="overflow-y: auto;">
+                    <table class="table table-sm table-striped mb-0" style="font-size: 0.85rem;">
+                        <thead>
+                            <tr>
+                                <th>Plaka</th>
+                                <th>Durum</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td><strong>@item.plate_number</strong></td>
+                                    <td><span class="text-success">Girebilir</span></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    
+    setInterval(updateLastAccess, 1000); // Her 1 saniyede bir yeni araç sorgusu
+
+    async function updateLastAccess(){
+        try {
+            // Python API'ye istek at
+            const response = await fetch('http://localhost:8000/latest-log');
+            const data = await response.json();
+
+            // Plaka yoksa bir şey yapma
+            if (data.plate === "-") return;
+
+            // HTML elemanlarını güncelle
+            document.getElementById('lblPlate').innerText = data.plate;
+            document.getElementById('lblTime').innerText = data.time;
+
+            const badge = document.getElementById('statusBadge');
+            const card = document.getElementById('statusCard');
+
+            if (data.status === true) {
+                // Kayıtlı plaka
+                badge.className = "badge bg-success p-3 w-100 mt-2";
+                badge.innerText = "GİRİŞ İZNİ VERİLDİ";
+                card.style.border = "3px solid green";
+                document.getElementById('lblOwner').innerText = "Site Sakini"; 
+            } else {
+                // plaka kayuıtlı değil
+                badge.className = "badge bg-danger p-3 w-100 mt-2";
+                badge.innerText = "İZİNSİZ GİRİŞ!";
+                card.style.border = "3px solid red";
+                document.getElementById('lblOwner').innerText = "Misafir / Tanımsız";
+            }
+
+        } 
+        catch (error) 
+            console.error("Veri çekilemedi:", error);
+    }
+</script>

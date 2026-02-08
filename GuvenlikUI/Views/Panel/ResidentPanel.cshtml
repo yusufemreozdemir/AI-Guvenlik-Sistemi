@@ -1,0 +1,52 @@
+@model List<GuvenlikUI.Models.PlateModel>
+@{ ViewData["Title"] = "Daire Sakini"; }
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>Hoşgeldiniz, Site Sakini</h2>
+        <a href="/Account/Logout" class="btn btn-outline-danger btn-sm">Çıkış</a>
+    </div>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Canlı Kapı Görüntüsü</div>
+                <div class="card-body p-0">
+                     <img src="http://localhost:8000/video_feed" style="width: 100%;" />
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5>Misafir Plakası Ekle</h5>
+                    <form asp-action="AddPlate" method="post">
+                        <input type="hidden" name="returnUrl" value="/Panel/ResidentPanel" />
+                        <div class="input-group">
+                            <input type="text" name="plateNumber" class="form-control" placeholder="34ABC12" required>
+                            <button class="btn btn-primary" type="submit">Ekle</button>
+                        </div>
+                    </form>
+                    @if (TempData["Message"] != null) { <small class="text-success">@TempData["Message"]</small> }
+                </div>
+            </div>
+
+            <h5>İzin Verdiğim Araçlar</h5>
+            <ul class="list-group">
+                @if (Model != null && Model.Count > 0)
+                {
+                    @foreach (var item in Model)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @item.plate_number
+                            <span class="badge bg-success rounded-pill">Aktif</span>
+                        </li>
+                    }
+                }
+                else { <li class="list-group-item text-muted">Kayıtlı aracınız yok.</li> }
+            </ul>
+        </div>
+    </div>
+</div>
