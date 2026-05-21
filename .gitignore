@@ -14,8 +14,11 @@ env/
 *.db
 *.sqlite3
 
-weights/
-*.pt
+# .pt model dosyalarının GitHub'a yüklenmesine izin veriyoruz
+# *.pt (Silindi)
+# weights/ (Silindi)
+
+# Ancak dönüştürülmüş modeller her bilgisayarda farklı olacağı için onları engelliyoruz
 *.engine
 *.onnx
 
